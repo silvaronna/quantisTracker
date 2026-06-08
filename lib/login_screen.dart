@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'reusable_widgets.dart';
+import 'dashboard_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -85,14 +86,24 @@ class LoginScreen extends StatelessWidget {
                 // Sign In Button
                 NeonButton(
                   label: 'Sign In',
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const DashboardScreen()),
+                    );
+                  },
                 ),
                 const SizedBox(height: 32),
                 // Secondary Button (e.g. FaceID)
                 Center(
                   child: NeonIconButton(
                     icon: const Icon(Icons.face, color: Color(0xFF0ABBAE), size: 32),
-                    onPressed: () {},
+                    onPressed: () {
+                       Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const DashboardScreen()),
+                      );
+                    },
                   ),
                 ),
                 const SizedBox(height: 48),

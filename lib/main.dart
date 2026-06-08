@@ -25,6 +25,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF0ABBAE)), 
+        scaffoldBackgroundColor: Colors.black,
         useMaterial3: true,
       ),
       home: const LoginScreen(), 
