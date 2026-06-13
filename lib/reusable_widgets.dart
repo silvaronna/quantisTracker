@@ -66,12 +66,14 @@ class NeonInput extends StatelessWidget {
   final String hintText;
   final IconData icon;
   final bool isPassword;
+  final Function(String)? onChanged;
 
   const NeonInput({
     super.key,
     required this.hintText,
     required this.icon,
     this.isPassword = false,
+    this.onChanged,
   });
 
   @override
@@ -84,6 +86,7 @@ class NeonInput extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: TextField(
         obscureText: isPassword,
+        onChanged: onChanged,
         style: const TextStyle(color: Colors.white),
         decoration: InputDecoration(
           hintText: hintText,

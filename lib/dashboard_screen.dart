@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'market_screen.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
@@ -21,11 +22,11 @@ class DashboardScreen extends StatelessWidget {
                     const SizedBox(height: 32),
                     _buildPortfolioSummary(),
                     const SizedBox(height: 32),
-                    _buildSectionTitle('Active Assets'),
+                    _buildSectionTitle(context, 'Active Assets'),
                     const SizedBox(height: 16),
-                    _buildAssetList(),
+                    _buildAssetList(context),
                     const SizedBox(height: 32),
-                    _buildSectionTitle('Recent Performance'),
+                    _buildSectionTitle(context, 'Recent Performance'),
                     const SizedBox(height: 16),
                     _buildPerformanceChart(),
                   ],
@@ -35,7 +36,7 @@ class DashboardScreen extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: _buildBottomNav(),
+      bottomNavigationBar: _buildBottomNav(context),
     );
   }
 
@@ -132,7 +133,7 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSectionTitle(String title) {
+  Widget _buildSectionTitle(BuildContext context, String title) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -144,71 +145,87 @@ class DashboardScreen extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        const Text(
-          'See All',
-          style: TextStyle(color: Color(0xFF0ABBAE), fontWeight: FontWeight.w600),
+        GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const MarketScreen()),
+            );
+          },
+          child: const Text(
+            'See All',
+            style: TextStyle(color: Color(0xFF0ABBAE), fontWeight: FontWeight.w600),
+          ),
         ),
       ],
     );
   }
 
-  Widget _buildAssetList() {
+  Widget _buildAssetList(BuildContext context) {
     return Column(
       children: [
-        _buildAssetItem('Bitcoin', 'BTC', '\$64,230.10', '+3.2%', 'assets/logos/Bitcoin-Logo.png'),
+        _buildAssetItem(context, 'Bitcoin', 'BTC', '\$64,230.10', '+3.2%', 'assets/logos/Bitcoin-Logo.png'),
         const SizedBox(height: 12),
-        _buildAssetItem('Ethereum', 'ETH', '\$3,450.25', '-1.5%', 'assets/logos/ETH-Logo.png'),
+        _buildAssetItem(context, 'Ethereum', 'ETH', '\$3,450.25', '-1.5%', 'assets/logos/ETH-Logo.png'),
         const SizedBox(height: 12),
-        _buildAssetItem('Solana', 'SOL', '\$145.80', '+8.7%', 'assets/logos/Solana-Logo.png'),
+        _buildAssetItem(context, 'Solana', 'SOL', '\$145.80', '+8.7%', 'assets/logos/Solana-Logo.png'),
       ],
     );
   }
 
-  Widget _buildAssetItem(String name, String symbol, String price, String change, String logoPath) {
+  Widget _buildAssetItem(BuildContext context, String name, String symbol, String price, String change, String logoPath) {
     bool isPositive = change.startsWith('+');
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: const Color(0xFF1C1C1E),
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: Colors.black,
-              borderRadius: BorderRadius.circular(12),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const MarketScreen()),
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: const Color(0xFF1C1C1E),
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Image.asset(
+                logoPath,
+                width: 24,
+                height: 24,
+                fit: BoxFit.contain,
+                errorBuilder: (context, error, stackTrace) => const Icon(Icons.currency_bitcoin, color: Color(0xFF0ABBAE)),
+              ),
             ),
-            child: Image.asset(
-              logoPath,
-              width: 24,
-              height: 24,
-              fit: BoxFit.contain,
-              errorBuilder: (context, error, stackTrace) => const Icon(Icons.currency_bitcoin, color: Color(0xFF0ABBAE)),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(name, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                  Text(symbol, style: TextStyle(color: Colors.white.withOpacity(0.5))),
+                ],
+              ),
             ),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Text(name, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                Text(symbol, style: TextStyle(color: Colors.white.withOpacity(0.5))),
+                Text(price, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                Text(
+                  change,
+                  style: TextStyle(color: isPositive ? Colors.green : Colors.red, fontWeight: FontWeight.w600),
+                ),
               ],
             ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(price, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-              Text(
-                change,
-                style: TextStyle(color: isPositive ? Colors.green : Colors.red, fontWeight: FontWeight.w600),
-              ),
-            ],
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -227,7 +244,7 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildBottomNav() {
+  Widget _buildBottomNav(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 16),
       decoration: const BoxDecoration(
@@ -237,30 +254,40 @@ class DashboardScreen extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildNavItem(Icons.dashboard, 'Home', true),
-          _buildNavItem(Icons.pie_chart_outline, 'Portfolio', false),
-          _buildNavItem(Icons.swap_horiz, 'Trade', false),
-          _buildNavItem(Icons.person_outline, 'Profile', false),
+          _buildNavItem(context, Icons.dashboard, 'Home', true),
+          _buildNavItem(context, Icons.pie_chart_outline, 'Portfolio', false),
+          _buildNavItem(context, Icons.swap_horiz, 'Trade', false),
+          _buildNavItem(context, Icons.person_outline, 'Profile', false),
         ],
       ),
     );
   }
 
-  Widget _buildNavItem(IconData icon, String label, bool isActive) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, color: isActive ? const Color(0xFF0ABBAE) : Colors.grey),
-        const SizedBox(height: 4),
-        Text(
-          label,
-          style: TextStyle(
-            color: isActive ? const Color(0xFF0ABBAE) : Colors.grey,
-            fontSize: 12,
-            fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
+  Widget _buildNavItem(BuildContext context, IconData icon, String label, bool isActive) {
+    return GestureDetector(
+      onTap: () {
+        if (label == 'Trade') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const MarketScreen()),
+          );
+        }
+      },
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, color: isActive ? const Color(0xFF0ABBAE) : Colors.grey),
+          const SizedBox(height: 4),
+          Text(
+            label,
+            style: TextStyle(
+              color: isActive ? const Color(0xFF0ABBAE) : Colors.grey,
+              fontSize: 12,
+              fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
